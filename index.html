@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tanuhari Pathak — Legal Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Mono:wght@300;400;500&family=Satoshi:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#080a0f;--bg2:#0c0e15;--bg3:#10131c;--card:#0e1118;
+  --border:rgba(180,148,82,0.15);--border2:rgba(180,148,82,0.08);
+  --gold:#c8a45a;--gold2:#e4c97e;--gold-dim:rgba(200,164,90,0.10);--gold-glow:rgba(200,164,90,0.25);
+  --teal:#5ecfb8;--teal-dim:rgba(94,207,184,0.10);
+  --rose:#e07070;--text:#ece6d8;--text2:#968e7e;--text3:#524d44;
+  --radius:14px;--ease:cubic-bezier(0.16,1,0.3,1);--t:0.35s;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Satoshi',sans-serif;font-weight:300;line-height:1.7;overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.5;}
+
+/* TERMINAL BOOT SEQUENCE */
+#bootScreen { display: none; position: fixed; inset: 0; background: #080a0f; z-index: 99999; flex-direction: column; justify-content: center; padding: 3rem; font-family: 'DM Mono', monospace; font-size: 0.9rem; color: var(--teal); }
+.boot-line { opacity: 0; margin-bottom: 0.5rem; text-shadow: 0 0 8px var(--teal-dim); }
+
+/* NODE NETWORK BACKGROUND */
+#nodeCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.6; }
+
+/* SCROLL REVEAL ANIMATIONS */
+.reveal { opacity: 0; transform: translateY(25px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+/* LIQUID GRADIENT TEXT */
+.liquid-text { background: linear-gradient(to right, var(--gold), var(--teal), var(--gold2), var(--gold)); background-size: 300% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: liquidText 5s linear infinite; }
+@keyframes liquidText { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+
+/* MAGIC MARKER HIGHLIGHT */
+.magic-marker { background: linear-gradient(120deg, rgba(200, 164, 90, 0.3) 0%, rgba(200, 164, 90, 0.3) 100%); background-repeat: no-repeat; background-size: 0% 100%; transition: background-size 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); color: var(--text); padding: 0 4px; border-radius: 3px; }
+.reveal.active .magic-marker { background-size: 100% 100%; }
+
+/* CYBER GLITCH TEXT */
+.glitch-text { display: inline-block; cursor: crosshair; }
+
+/* SHIMMER & MAGNETIC BUTTONS */
+@keyframes shimmer { 0% { left: -100%; } 100% { left: 200%; } }
+.shimmer-btn { position: relative; overflow: hidden; }
+.shimmer-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transform: skewX(-20deg); animation: shimmer 3s infinite; pointer-events: none; z-index: 1; }
+.magnetic-btn { transition: background var(--t), box-shadow var(--t), transform 0.15s ease-out; will-change: transform; }
+
+/* SPOTLIGHT BORDERS */
+.spotlight-card { position: relative; }
+.spotlight-border { position: absolute; inset: 0; pointer-events: none; border-radius: inherit; padding: 1px; background: radial-gradient(400px circle at var(--mouseX, -999px) var(--mouseY, -999px), rgba(200, 164, 90, 0.45), transparent 40%); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.3s ease; z-index: 5; }
+.spotlight-card:hover .spotlight-border { opacity: 1; }
+
+/* IPR EFFECTS: VERIFIED STAMP & BIOMETRIC HASH */
+.ipr-card { position: relative; }
+.ipr-stamp { position: absolute; bottom: 1.5rem; right: 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.15em; color: var(--gold); border: 1px solid var(--gold); padding: 0.2rem 0.5rem; border-radius: 4px; background: rgba(200, 164, 90, 0.1); opacity: 0; transform: scale(1.5) rotate(-10deg); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none; z-index: 20; box-shadow: 0 0 15px var(--gold-glow); }
+.ipr-card:hover .ipr-stamp { opacity: 1; transform: scale(1) rotate(-10deg); }
+.bio-mark { position: absolute; width: 120px; height: 120px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235ecfb8' stroke-width='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2a10 10 0 0 0-10 10 10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2z'/%3E%3Cpath d='M12 6a6 6 0 0 0-6 6 6 6 0 0 0 6 6 6 6 0 0 0 6-6 6 6 0 0 0-6-6z'/%3E%3Cpath d='M12 10a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2z'/%3E%3C/svg%3E"); background-size: contain; background-repeat: no-repeat; opacity: 0; pointer-events: none; z-index: 1; mix-blend-mode: screen; transition: opacity 0.4s ease; top: var(--bioY, 50%); left: var(--bioX, 50%); transform: translate(-50%, -50%); }
+.ipr-card:hover .bio-mark { opacity: 0.08; }
+
+/* SVG ICON ANIMATIONS */
+.svg-ic { width: 24px; height: 24px; stroke: var(--gold); stroke-width: 1.5; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.5s var(--ease); }
+.active .svg-ic { stroke-dashoffset: 0; }
+.sb-a .svg-ic { width: 16px; height: 16px; stroke: var(--text3); stroke-dasharray: none; stroke-dashoffset: 0; transition: stroke var(--t); }
+.sb-a:hover .svg-ic, .sb-a.act .svg-ic { stroke: var(--gold); }
+
+/* GATE */
+#gate{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:10000;padding:2rem;}
+#gate.out{animation:gOut 0.5s var(--ease) forwards;pointer-events:none;}
+@keyframes gOut{to{opacity:0;transform:scale(1.05);}}
+.g-inner{max-width:460px;width:100%;text-align:center;animation:rise 0.9s var(--ease) both;}
+@keyframes rise{from{opacity:0;transform:translateY(36px);}to{opacity:1;transform:translateY(0);}}
+.g-ring{width:88px;height:88px;border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:600;color:var(--gold);position:relative;box-shadow:0 0 40px var(--gold-glow);}
+.g-ring::before{content:'';position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(200,164,90,0.15);}
+.g-ring::after{content:'';position:absolute;inset:-16px;border-radius:50%;border:1px solid rgba(200,164,90,0.07);}
+.g-name{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,6vw,3.2rem);font-weight:300;color:var(--text);letter-spacing:0.03em;line-height:1.1;margin-bottom:0.4rem;}
+.g-name em{color:var(--gold);font-style:italic;}
+.g-tag{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.25em;color:var(--text3);text-transform:uppercase;margin-bottom:2.5rem;}
+.g-desc{font-size:0.88rem;color:var(--text2);margin-bottom:2rem;line-height:1.7;}
+.g-field{display:flex;gap:0.4rem;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:0.35rem 0.35rem 0.35rem 1rem;margin-bottom:0.6rem;transition:border-color var(--t);}
+.g-field:focus-within{border-color:var(--gold);}
+.g-field input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'Satoshi',sans-serif;font-size:0.9rem;}
+.g-field input::placeholder{color:var(--text3);}
+.g-btn{appearance:none;-webkit-appearance:none;background:var(--gold);color:#080a0f;border:none;border-radius:9px;padding:0.65rem 1.3rem;font-family:'Satoshi',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.g-note{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--text3);}
+.g-err{color:var(--rose);font-size:0.78rem;margin-top:0.4rem;display:none;}
+
+/* APP & SIDEBAR */
+#app{display:none;min-height:100vh;position:relative;z-index:1;}
+#app.on{display:block;animation:fadeIn 0.8s ease both;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.layout{display:flex;min-height:100vh;position:relative;z-index:2;}
+.sidebar{width:272px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border2);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;display:flex;flex-direction:column;padding:2.2rem 0;transition:transform var(--t) var(--ease);}
+.sidebar::-webkit-scrollbar{width:0;}
+.sb-pro{padding:0 1.6rem 1.8rem;border-bottom:1px solid var(--border2);margin-bottom:1.2rem;}
+.sb-av{width:56px;height:56px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--gold);margin-bottom:0.9rem;}
+.sb-nm{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--text);}
+.sb-rl{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.14em;color:var(--text3);text-transform:uppercase;margin-top:0.2rem;}
+.sb-srch{padding:0 1.1rem 1.4rem;border-bottom:1px solid var(--border2);margin-bottom:0.6rem;}
+.sb-sbox{display:flex;align-items:center;gap:0.5rem;background:var(--bg3);border:1px solid var(--border2);border-radius:9px;padding:0.5rem 0.8rem;transition:border-color var(--t);}
+.sb-sbox:focus-within{border-color:var(--gold);}
+.sb-sbox input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:0.82rem; transition: opacity 0.3s ease;}
+.sb-sbox input::placeholder{color:var(--text3);}
+.sb-sec{padding:0 1.1rem;margin-bottom:0.2rem;}
+.sb-lbl{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;color:var(--text3);text-transform:uppercase;padding:0.4rem 0.5rem;margin-bottom:0.1rem;}
+.sb-a{display:flex;align-items:center;gap:0.8rem;padding:0.5rem 0.7rem;border-radius:9px;color:var(--text2);font-size:0.83rem;text-decoration:none;transition:all var(--t);}
+.sb-a:hover,.sb-a.act{background:var(--gold-dim);color:var(--gold);}
+.sb-ft{margin-top:auto;padding:1.4rem 1.6rem 0;border-top:1px solid var(--border2);font-family:'DM Mono',monospace;font-size:0.67rem;color:var(--text3);line-height:1.8;}
+
+/* MAIN */
+.main{margin-left:272px;flex:1;padding:0 3.5rem 5rem;max-width:calc(100vw - 272px);}
+
+/* HERO WITH PROFILE IMAGE */
+.hero-wrap { display: flex; gap: 3rem; align-items: center; padding: 4rem 0 2.5rem; border-bottom: 1px solid var(--border2); margin-bottom: 0; }
+.hero-content { flex: 1; }
+.hero-ey{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.28em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem;}
+.hero-nm{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,7vw,5.5rem);font-weight:300;line-height:1.02;color:var(--text);margin-bottom:0.4rem;}
+.hero-sb{font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.2em;color:var(--text3);text-transform:uppercase;margin-bottom:1.5rem;}
+.hero-bio{font-size:0.97rem;color:var(--text2);line-height:1.85;margin-bottom:2.2rem; max-width: 680px;}
+
+/* TYPING EFFECT */
+.type-container { display: inline-flex; align-items: center; background: rgba(200,164,90,0.1); padding: 0.2rem 0.6rem; border-radius: 6px; border: 1px solid rgba(200,164,90,0.2); }
+#type-text { color: var(--gold); font-weight: 500; }
+.cursor { color: var(--gold); animation: blink 1s step-end infinite; margin-left: 2px;}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* REVEAL IMAGE - ROUND DESIGN */
+.hero-img-box { width: 250px; height: 250px; flex-shrink: 0; border-radius: 50%; overflow: hidden; position: relative; border: 1px solid var(--border); transition: all 0.5s ease; padding: 6px; background: var(--bg2); box-shadow: 0 0 30px rgba(200,164,90,0.05); }
+.hero-img-box::before { content: ''; position: absolute; inset: 0; border-radius: 50%; padding: 2px; background: linear-gradient(135deg, var(--gold), var(--teal), transparent, transparent); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; opacity: 0.8; animation: spin 4s linear infinite; }
+.hero-img-inner { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background: var(--bg3); position: relative; z-index: 2; }
+.hero-img-inner img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
+.hero-img-box:hover { transform: translateY(-5px); box-shadow: 0 10px 40px var(--gold-glow); }
+.hero-img-box:hover img { transform: scale(1.08); }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+.chips{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:2.2rem;}
+.chip{background:var(--gold-dim);border:1px solid rgba(200,164,90,0.22);color:var(--gold);border-radius:100px;padding:0.28rem 0.85rem;font-size:0.72rem;font-family:'DM Mono',monospace;letter-spacing:0.07em; transition: all var(--t);}
+.chip:hover { transform: translateY(-2px); background: rgba(200,164,90,0.2); }
+.chip.t{background:var(--teal-dim);border-color:rgba(94,207,184,0.22);color:var(--teal);}
+.chip.t:hover { background: rgba(94,207,184,0.2); }
+.ccs{display:flex;flex-wrap:wrap;gap:0.8rem;}
+.cc{display:flex;align-items:center;gap:0.5rem;background:var(--bg3);border:1px solid var(--border2);border-radius:9px;padding:0.5rem 1rem;font-size:0.78rem;color:var(--text2);text-decoration:none;transition:all var(--t);}
+.cc:hover{border-color:var(--gold);color:var(--gold); transform: translateY(-2px);}
+
+/* STATS WITH SMOOTH COUNT-UP */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;margin:2.5rem 0;background:var(--card);position:relative;z-index:2;}
+.stat{padding:1.6rem 1.2rem;text-align:center;border-right:1px solid var(--border2);transition:background var(--t);}
+.stat:last-child{border-right:none;}
+.stat:hover{background:var(--gold-dim);}
+.s-num{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:600;color:var(--gold);line-height:1;margin-bottom:0.3rem; transition: opacity 0.3s ease;}
+.s-lbl{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;color:var(--text3);text-transform:uppercase; transition: opacity 0.3s ease;}
+
+/* SECTION HEADERS */
+.sec{margin-bottom:3.8rem;scroll-margin-top:2rem;}
+.sec-hd{display:flex;align-items:center;gap:1rem;margin-bottom:1.8rem;}
+.sec-hd-ln{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+.sec-hd h2{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:600;color:var(--text);white-space:nowrap;}
+.sec-hd .svg-ic { stroke: var(--gold); width: 20px; height: 20px;}
+
+/* 3D TILT CARDS BASE */
+.tilt-card { transform-style: preserve-3d; transform: perspective(1000px); position: relative; }
+.tilt-glare { position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.06), transparent); opacity: 0; transition: opacity 0.3s ease; pointer-events: none; border-radius: inherit; mix-blend-mode: overlay; z-index: 10; }
+.tilt-card:hover .tilt-glare { opacity: 1; }
+
+/* WHY HIRE ME & RADAR */
+.why-wrap { display: grid; grid-template-columns: 1fr 300px; gap: 2rem; align-items: stretch; margin-bottom: 4rem;}
+.why{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.5rem 2.8rem;position:relative;overflow:hidden;z-index:2;}
+.why::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--teal),transparent);}
+.why-ey{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem;}
+.why-hl{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:600;font-style:italic;color:var(--text);line-height:1.2;margin-bottom:1.6rem;}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;}
+.wc{background:var(--bg3);border:1px solid var(--border2);border-radius:11px;padding:1.5rem 1.4rem; border-color: rgba(180,148,82,0.1);}
+.wc-ic{margin-bottom:1rem; display: inline-flex; padding: 10px; border-radius: 8px; background: var(--bg2); border: 1px solid var(--border2);}
+.wc-ti{font-size:0.88rem;font-weight:600;color:var(--text);margin-bottom:0.4rem; transform: translateZ(20px);}
+.wc-de{font-size:0.8rem;color:var(--text2);line-height:1.65; transform: translateZ(10px);}
+
+/* SKILL RADAR */
+.radar-box { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1rem; position: relative; overflow: hidden; }
+.radar-box::before { content: ''; position: absolute; bottom: 0; left: 0; width: 3px; height: 100%; background: linear-gradient(0deg, var(--gold), var(--teal)); }
+.radar-title { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 1.5rem; }
+
+/* SIGNATURE WORK */
+.sig-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem;}
+.sig-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.8rem 2rem;position:relative;overflow:hidden;}
+.sig-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--gold),var(--teal));}
+.sig-inner { transform: translateZ(20px); }
+.sig-jn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;color:var(--teal);text-transform:uppercase;margin-bottom:0.7rem;}
+.sig-ti{font-family:'Cormorant Garamond',serif;font-size:1.18rem;font-weight:600;font-style:italic;color:var(--text);line-height:1.35;margin-bottom:0.8rem;}
+.sig-qt{font-size:0.82rem;color:var(--text2);border-left:2px solid var(--gold);padding-left:0.9rem;margin-bottom:1rem;font-style:italic;line-height:1.7;}
+.sig-tags{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1rem;}
+.sig-tag{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--text3);background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:0.15rem 0.5rem;letter-spacing:0.07em;}
+
+/* TIMELINE (INTERNSHIPS) */
+.tl-wrap { position: relative; padding-left: 3rem; }
+.tl-line { position: absolute; left: 11px; top: 2rem; bottom: 2rem; width: 2px; background: var(--border2); border-radius: 2px; }
+.tl-prog { width: 100%; height: 0; background: linear-gradient(180deg, var(--gold), var(--teal)); transition: height 0.3s linear; box-shadow: 0 0 10px var(--gold-glow); border-radius: 2px;}
+.tl-item { position: relative; margin-bottom: 1.5rem; }
+.tl-node { position: absolute; left: -3rem; top: 1.8rem; width: 14px; height: 14px; border-radius: 50%; background: var(--bg2); border: 2px solid var(--border2); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform: translateX(2px); z-index: 2;}
+.tl-item.lit .tl-node { border-color: var(--gold); background: var(--gold); box-shadow: 0 0 12px var(--gold-glow); transform: translateX(2px) scale(1.3); }
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:1.5rem 1.7rem;position:relative;overflow:hidden;transition:all var(--t);}
+.card-hd{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:0.8rem;flex-wrap:wrap;}
+.card-org{font-size:0.97rem;font-weight:500;color:var(--text);}
+.card-mt{display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;}
+.badge{font-family:'DM Mono',monospace;font-size:0.63rem;letter-spacing:0.1em;color:var(--teal);background:var(--teal-dim);border:1px solid rgba(94,207,184,0.18);padding:0.18rem 0.55rem;border-radius:6px;text-transform:uppercase;}
+.dp{font-family:'DM Mono',monospace;font-size:0.67rem;color:var(--text3);background:var(--bg3);border:1px solid var(--border2);padding:0.18rem 0.55rem;border-radius:6px;white-space:nowrap;}
+.pts{list-style:none;}
+.pts li{display:flex;gap:0.75rem;font-size:0.85rem;color:var(--text2);padding:0.28rem 0;border-bottom:1px solid rgba(255,255,255,0.025);line-height:1.6;}
+.pts li:last-child{border-bottom:none;}
+.pts li::before{content:'›';color:var(--gold);font-size:1rem;flex-shrink:0;margin-top:0.05rem;}
+
+/* VERIFY LINKS */
+.vl{display:inline-flex;align-items:center;gap:0.4rem;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);text-decoration:none;letter-spacing:0.08em;border:1px solid rgba(200,164,90,0.28);padding:0.22rem 0.6rem;border-radius:7px;margin-top:0.8rem;margin-right:0.4rem;transition:all var(--t);background:var(--gold-dim);cursor:pointer;}
+.vl:hover{background:rgba(200,164,90,0.2);border-color:var(--gold);transform:translateY(-1px);}
+.vl.ext{color:var(--teal);border-color:rgba(94,207,184,0.28);background:var(--teal-dim);}
+.vl.ext:hover{background:rgba(94,207,184,0.2);border-color:var(--teal);}
+
+/* MODAL: HOLOGRAPHIC CERTIFICATE VIEWER */
+#modal{display:none;position:fixed;inset:0;background:rgba(8,10,15,0.95);z-index:50000;align-items:center;justify-content:center;padding:2rem;backdrop-filter:blur(10px); perspective: 1200px;}
+#modal.show{display:flex;}
+.m-box{max-width:780px; width:100%; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; position:relative; transform-origin: top center; box-shadow: 0 20px 50px rgba(0,0,0,0.5);}
+#modal.show .m-box { animation: docUnfold 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes docUnfold { 0% { transform: rotateX(-70deg) scale(0.8) translateY(-100px); opacity: 0; filter: blur(5px); } 50% { transform: rotateX(10deg) scale(1.02) translateY(10px); opacity: 1; filter: blur(0); } 100% { transform: rotateX(0deg) scale(1) translateY(0); opacity: 1; filter: blur(0); } }
+
+.m-top{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.4rem;border-bottom:1px solid var(--border2); position: relative; z-index: 20;}
+.m-title{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.15em;color:var(--gold);text-transform:uppercase;}
+.m-close{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);border-radius:7px;padding:0.3rem 0.7rem;font-size:0.82rem;cursor:pointer;transition:all var(--t);}
+.m-close:hover{border-color:var(--rose);color:var(--rose);}
+.m-img-wrap{position:relative;user-select:none;-webkit-user-select:none; overflow: hidden;}
+.m-img-wrap img{width:100%;display:block;max-height:70vh;object-fit:contain;pointer-events:none;-webkit-user-drag:none; position: relative; z-index: 10;}
+.wm-grid{position:absolute;inset:0;overflow:hidden;pointer-events:none; z-index: 15;}
+.wm-it{position:absolute;font-family:'DM Mono',monospace;font-size:0.85rem;color:rgba(200,164,90,0.25);letter-spacing:0.08em;transform:rotate(-30deg);white-space:nowrap;user-select:none;pointer-events:none;font-weight:bold;}
+
+/* Holographic Foil Layer inside Modal */
+.holo-foil { position: absolute; inset: 0; background: linear-gradient(115deg, transparent 20%, rgba(255, 200, 255, 0.15) 35%, rgba(150, 255, 255, 0.15) 50%, rgba(255, 255, 150, 0.15) 65%, transparent 80%); background-size: 200% 200%; mix-blend-mode: color-dodge; pointer-events: none; opacity: 0; transition: opacity 0.3s ease; z-index: 18; }
+.m-img-wrap:hover .holo-foil { opacity: 1; }
+
+/* EDU & CERT GRIDS */
+.edu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:1rem;}
+.edu-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:1.4rem 1.5rem; margin-bottom: 0;}
+.edu-in{font-weight:500;color:var(--text);margin-bottom:0.25rem;}
+.edu-dg{font-size:0.83rem;color:var(--text2);margin-bottom:0.25rem;}
+.edu-yr{font-family:'DM Mono',monospace;font-size:0.67rem;color:var(--gold);letter-spacing:0.1em;}
+.edu-sc{display:inline-block;margin-top:0.5rem;background:var(--gold-dim);border:1px solid rgba(200,164,90,0.18);color:var(--gold);font-family:'DM Mono',monospace;font-size:0.65rem;padding:0.18rem 0.55rem;border-radius:6px;}
+
+.crt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem;}
+.crt-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:1.3rem 1.5rem;}
+.crt-nm{font-weight:500;color:var(--text);margin-bottom:0.25rem;font-size:0.9rem;}
+.crt-is{font-size:0.78rem;color:var(--text2);margin-bottom:0.6rem;}
+
+/* CONTACT */
+.ct-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.5rem 2.8rem;position:relative;overflow:hidden;}
+.ct-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--gold),transparent);}
+.ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;}
+.ct-l h3{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600;font-style:italic;color:var(--text);margin-bottom:0.7rem;}
+.ct-l p{font-size:0.88rem;color:var(--text2);line-height:1.75;margin-bottom:1.4rem;}
+.ct-info{display:flex;flex-direction:column;gap:0.5rem;}
+.ci{display:flex;align-items:center;gap:0.7rem;font-size:0.82rem;color:var(--text2);}
+.ci a{color:var(--text2);text-decoration:none;transition:color var(--t);}
+.ci a:hover{color:var(--gold);}
+.cform{display:flex;flex-direction:column;gap:0.8rem;}
+.cform input,.cform textarea{background:var(--bg3);border:1px solid var(--border2);border-radius:9px;padding:0.75rem 1rem;color:var(--text);font-family:'Satoshi',sans-serif;font-size:0.85rem;outline:none;transition:border-color var(--t);resize:none;}
+.cform input::placeholder,.cform textarea::placeholder{color:var(--text3);}
+.cform input:focus,.cform textarea:focus{border-color:var(--gold);}
+.cform textarea{height:110px;}
+.cform-btn{appearance:none;-webkit-appearance:none;background:var(--gold);color:#080a0f !important;border:none;border-radius:9px;padding:0.85rem 1.5rem;font-family:'Satoshi',sans-serif;font-size:0.88rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;width:100%; position:relative;}
+.cf-ok{display:none;text-align:center;padding:2rem;font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--teal);letter-spacing:0.1em;}
+
+/* INTERESTS */
+.int-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;}
+.int-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:1.5rem;transition:all var(--t);}
+.int-card:hover{border-color:rgba(200,164,90,0.4);transform:translateY(-2px);}
+.int-ic{margin-bottom:0.8rem;}
+.int-nm{font-weight:500;color:var(--text);margin-bottom:0.25rem;font-size:0.9rem;}
+.int-de{font-size:0.78rem;color:var(--text2);line-height:1.6;}
+
+.no-res{display:none;text-align:center;padding:3rem;font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--text3);}
+.ham{display:none;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:0.5rem 0.7rem;cursor:pointer;color:var(--text);font-size:1.1rem;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px;}
+
+@media(max-width:960px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;padding:2rem 1.4rem 4rem;max-width:100vw;}
+  .ham{display:flex;}
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .why-wrap{grid-template-columns: 1fr;}
+  .ct-grid{grid-template-columns:1fr;}
+  .hero-wrap{flex-direction: column-reverse; text-align: center; align-items: center;}
+  .ccs{justify-content: center;}
+  .chips{justify-content: center;}
+  .hero-bio{margin-left: auto; margin-right: auto;}
+  .tl-wrap{padding-left: 2rem;}
+  .tl-line{left: 3px;}
+  .tl-node{left: -2.2rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="bootScreen">
+  <div id="bootTextWrap"></div>
+</div>
+
+<div id="gate">
+  <div class="g-inner">
+    <div class="g-ring">TP</div>
+    <h1 class="g-name">Tanuhari <em>Pathak</em></h1>
+    <p class="g-tag">Legal Portfolio · B.A. LL.B. · Lloyd Law College</p>
+    <p class="g-desc">A verified portfolio of work, publications & credentials.<br/>Please enter your email to continue.</p>
+    <form id="gForm" action="https://formspree.io/f/xbdqqgvv" method="POST">
+      <div class="g-field">
+        <input type="email" name="email" id="gEmail" placeholder="your@email.com" required autocomplete="email"/>
+        <button type="submit" class="g-btn magnetic-btn shimmer-btn">Enter →</button>
+      </div>
+      <input type="hidden" name="_subject" value="📂 New Portfolio Visit — Tanuhari Pathak"/>
+      <input type="hidden" name="visitor_time" id="vTime" value=""/>
+      <p class="g-err" id="gErr">Please enter a valid email.</p>
+    </form>
+    <p class="g-note">🔒 Only used to notify the portfolio owner of visits.</p>
+  </div>
+</div>
+
+<div id="modal">
+  <div class="m-box">
+    <div class="m-top">
+      <span class="m-title" id="mTitle">Certificate</span>
+      <button class="m-close" onclick="closeM()">✕ Close</button>
+    </div>
+    <div class="m-img-wrap" id="holoWrap">
+      <img id="mImg" src="" alt="Certificate" oncontextmenu="return false"/>
+      <div class="wm-grid" id="wmGrid"></div>
+      <div class="holo-foil" id="holoFoil"></div>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+  <canvas id="nodeCanvas"></canvas>
+
+  <button class="ham" onclick="toggleSB()">
+    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+  </button>
+  
+  <div class="layout">
+    <nav class="sidebar" id="sidebar">
+      <div class="sb-pro">
+        <div class="sb-av">TP</div>
+        <div class="sb-nm">Tanuhari Pathak</div>
+        <div class="sb-rl">B.A. LL.B. · 5th Year</div>
+      </div>
+      <div class="sb-srch">
+        <div class="sb-sbox">
+          <svg class="svg-ic" style="width:16px;height:16px;stroke:var(--text3)" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="srch" placeholder="Search…" oninput="doSearch(this.value)"/>
+        </div>
+      </div>
+      <div class="sb-sec">
+        <div class="sb-lbl">Sections</div>
+        <a class="sb-a" href="#hero" onclick="closeSB()"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>About</a>
+        <a class="sb-a" href="#why" onclick="closeSB()"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>Why Hire Me</a>
+        <a class="sb-a" href="#sig" onclick="closeSB()"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>Signature Work</a>
+        <a class="sb-a" href="#edu" onclick="closeSB()"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>Education</a>
+        <a class="sb-a" href="#intern" onclick="closeSB()"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>Internships</a>
+        <a class="sb-a" href="#pub" onclick="closeSB()"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>Publications</a>
+        <a class="sb-a" href="#cert" onclick="closeSB()"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>Certifications</a>
+        <a class="sb-a" href="#cocur" onclick="closeSB()"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>Co-Curricular</a>
+        <a class="sb-a" href="#int" onclick="closeSB()"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>Interests</a>
+        <a class="sb-a" href="#contact" onclick="closeSB()"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>Let's Connect</a>
+      </div>
+      <div class="sb-ft">Lloyd Law College, Greater Noida<br/>tanupathak365@gmail.com<br/>+91 9548656819</div>
+    </nav>
+
+    <main class="main">
+
+      <section id="hero" class="sec reveal">
+        <div class="hero-wrap">
+          <div class="hero-content">
+            <div class="hero-ey">Verified Legal Portfolio · Open to Opportunities</div>
+            <h1 class="hero-nm">Tanuhari <em class="liquid-text">Pathak</em></h1>
+            <div class="hero-sb">
+              <span class="type-container">Actively seeking roles in <span id="type-text"></span><span class="cursor">|</span></span>
+            </div>
+            <p class="hero-bio">As a final-year law student, my objective is to translate complex legal theory into actionable corporate strategy. Through seven targeted internships—from corporate law firms to the Supreme Court—I have built a robust foundation in regulatory compliance, legal drafting, and commercial dispute resolution. My published work on <span class="magic-marker">DPDPA, FinTech regulation, and digital rights</span> highlights my proactive approach to the legal challenges facing modern businesses.</p>
+            <div class="chips">
+              <span class="chip">Corporate Law</span>
+              <span class="chip t">FinTech</span>
+              <span class="chip t">TMT</span>
+              <span class="chip">IPR</span>
+              <span class="chip">Data Privacy</span>
+              <span class="chip">Cyber Law</span>
+              <span class="chip">Contract Drafting</span>
+            </div>
+            <div class="ccs">
+              <a class="cc" href="mailto:tanupathak365@gmail.com">✉️ tanupathak365@gmail.com</a>
+              <a class="cc" href="tel:+919548656819">📞 +91 9548656819</a>
+              <a class="cc" href="https://www.linkedin.com/in/tanu-pathak-a18434251/" target="_blank">🔗 LinkedIn</a>
+            </div>
+          </div>
+          <div class="hero-img-box">
+            <div class="hero-img-inner">
+              <img src="profile.jpg" alt="Tanuhari Pathak" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23c8a45a\' stroke-width=\'1\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\'%3E%3C/path%3E%3Ccircle cx=\'12\' cy=\'7\' r=\'4\'%3E%3C/circle%3E%3C/svg%3E'; this.style.padding='40px';"/>
+            </div>
+          </div>
+        </div>
+        
+        <div class="stats reveal" id="statsBar">
+          <div class="stat"><div class="s-num count-up" data-target="7">0</div><div class="s-lbl">Internships</div></div>
+          <div class="stat"><div class="s-num count-up" data-target="5">0</div><div class="s-lbl">Publications</div></div>
+          <div class="stat"><div class="s-num count-up" data-target="5" data-suffix="th">0</div><div class="s-lbl">Year of Study</div></div>
+          <div class="stat" style="transition: all 0.3s ease;">
+            <div class="s-num" id="rotMain">SC</div>
+            <div class="s-lbl" id="rotSub">Supreme Court Exp.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="why" class="sec reveal">
+        <div class="why-wrap">
+          <div class="why">
+            <div class="why-ey">Core Competencies</div>
+            <h2 class="why-hl">Bridging Legal Theory<br/><span class="liquid-text">and Practical Application</span></h2>
+            <div class="why-grid">
+              <div class="wc spotlight-card reveal">
+                <div class="spotlight-border"></div>
+                <div class="wc-ic"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+                <div class="wc-ti">FinTech & TMT Knowledge</div>
+                <div class="wc-de">My published work on the <span class="glitch-text" data-text="DPDPA">DPDPA</span>, deepfakes, and digital regulation demonstrates a practical understanding of the legal frameworks relevant to the FinTech and TMT sectors.</div>
+              </div>
+              <div class="wc spotlight-card reveal">
+                <div class="spotlight-border"></div>
+                <div class="wc-ic"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
+                <div class="wc-ti">Research & Publication</div>
+                <div class="wc-de">Authoring five published pieces has honed my ability to identify legal nuances, structure arguments, and communicate complex concepts clearly and professionally.</div>
+              </div>
+              <div class="wc spotlight-card reveal">
+                <div class="spotlight-border"></div>
+                <div class="wc-ic"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
+                <div class="wc-ti">Diverse Legal Exposure</div>
+                <div class="wc-de">My internship experiences, ranging from the Supreme Court to grassroots NGOs, have provided me with a well-rounded understanding of how the law operates across different forums.</div>
+              </div>
+              <div class="wc spotlight-card reveal">
+                <div class="spotlight-border"></div>
+                <div class="wc-ic"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
+                <div class="wc-ti">Practical Skillset</div>
+                <div class="wc-de">Through hands-on experience in reviewing policies, drafting legal briefs, and analyzing compliance, I have developed a reliable foundation for corporate legal work.</div>
+              </div>
+            </div>
+          </div>
+          <div class="radar-box reveal" id="radarWrap">
+            <div class="radar-title">Skill Architecture</div>
+            <canvas id="radarCanvas" width="260" height="260"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section id="sig" class="sec reveal">
+        <div class="sec-hd">
+          <svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          <h2>Signature Work</h2><div class="sec-hd-ln"></div>
+        </div>
+        <div class="sig-grid">
+          <div class="sig-card spotlight-card searchable reveal" data-text="publication article DPDPA digital personal data protection corporate fintech privacy compliance">
+            <div class="spotlight-border"></div>
+            <div class="sig-inner">
+              <div class="sig-jn">Legal Service India · Featured</div>
+              <div class="sig-ti">"The Digital Personal Data Protection Act, 2023"</div>
+              <div class="sig-qt">Navigating India's new data privacy landscape — what every business processing personal data must know now.</div>
+              <div class="sig-tags"><span class="sig-tag">FinTech</span><span class="sig-tag">Data Privacy</span><span class="sig-tag">Corporate Compliance</span></div>
+              <a class="vl ext" href="https://www.legalserviceindia.com/Legal-Articles/the-digital-personal-data-protection-act-2023-dpdpa-navigating-indias-new-data-privacy-landscape-for-businesses/" target="_blank">🔗 Read Article →</a>
+            </div>
+          </div>
+          
+          <div class="sig-card spotlight-card searchable ipr-card reveal" data-text="publication article deepfake photo harassment cyber law IT act IPR digital rights TMT">
+            <div class="spotlight-border"></div>
+            <div class="bio-mark"></div>
+            <div class="sig-inner">
+              <div class="sig-jn">Legal Service India · Featured</div>
+              <div class="sig-ti">"Your Face, Their Crime: A Legal Shield Against Deepfake Harassment"</div>
+              <div class="sig-qt">Analysing remedies under the IT Act for victims of AI-generated image abuse — a growing crisis at the heart of TMT law.</div>
+              <div class="sig-tags"><span class="sig-tag">TMT</span><span class="sig-tag">Cyber Law</span><span class="sig-tag">IPR</span><span class="sig-tag">IT Act</span></div>
+              <a class="vl ext" href="https://www.legalserviceindia.com/Legal-Articles/your-face-their-crime-a-legal-shield-against-deepfake-and-photo-harassment/" target="_blank">🔗 Read Article →</a>
+            </div>
+            <div class="ipr-stamp">® VERIFIED</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="edu" class="sec reveal">
+        <div class="sec-hd">
+          <svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+          <h2>Education</h2><div class="sec-hd-ln"></div>
+        </div>
+        <div class="edu-grid">
+          <div class="edu-card spotlight-card searchable reveal" data-text="education college lloyd law college ba llb greater noida 2022 2027"><div class="spotlight-border"></div><div class="edu-in">Lloyd Law College, Greater Noida</div><div class="edu-dg">B.A. LL.B. (Hons.)</div><div class="edu-yr">2022 – 2027</div><div class="edu-sc">59% · Till Sem VIII</div></div>
+          <div class="edu-card spotlight-card searchable reveal" data-text="education school cic college class xii 12th 2021 84"><div class="spotlight-border"></div><div class="edu-in">CIC College</div><div class="edu-dg">Higher Secondary (Class XII)</div><div class="edu-yr">2021</div><div class="edu-sc">84%</div></div>
+          <div class="edu-card spotlight-card searchable reveal" data-text="education school jsssminter college class x 10th 2019 78"><div class="spotlight-border"></div><div class="edu-in">J.S.S.S.M. Inter College</div><div class="edu-dg">Secondary (Class X)</div><div class="edu-yr">2019</div><div class="edu-sc">78%</div></div>
+        </div>
+      </section>
+
+      <section id="intern" class="sec reveal">
+        <div class="sec-hd">
+          <svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+          <h2>Internship Experience</h2><div class="sec-hd-ln"></div>
+        </div>
+
+        <div class="tl-wrap" id="tlWrap">
+          <div class="tl-line"><div class="tl-prog" id="tlProg"></div></div>
+          
+          <div class="tl-item card spotlight-card searchable reveal" data-text="internship king stubb kasiva labour law employment corporate december 2024">
+            <div class="spotlight-border"></div>
+            <div class="tl-node"></div>
+            <div class="card-hd"><div class="card-org">King Stubb & Kasiva, New Delhi</div><div class="card-mt"><span class="badge">Corporate · Labour</span><span class="dp">December 2024 · 4 weeks</span></div></div>
+            <ul class="pts">
+              <li>Conducted comprehensive research on labour law compliance, statutory frameworks, and employment-related case laws.</li>
+              <li>Reviewed HR policies for legal compliance and drafted research notes and legal briefs for corporate clients.</li>
+              <li>Contributed to employment-related advisory services and supported resolution of labour dispute matters.</li>
+              <li>Drafted legal briefs and research memoranda involving corporate employment obligations.</li>
+            </ul>
+            <button class="vl" onclick="openM('King Stubb & Kasiva — Internship Certificate','certificates/ksk.jpg')">📎 View Certificate</button>
+          </div>
+
+          <div class="tl-item card spotlight-card searchable reveal" data-text="internship national consumer dispute redressal commission ncdrc october 2025 corporate liability">
+            <div class="spotlight-border"></div>
+            <div class="tl-node"></div>
+            <div class="card-hd"><div class="card-org">National Consumer Dispute Redressal Commission, New Delhi</div><div class="card-mt"><span class="badge">Consumer · Quasi-Judicial</span><span class="dp">October 2025 · 4 weeks</span></div></div>
+            <ul class="pts">
+              <li>Analysed quasi-judicial proceedings for high-value consumer disputes, focusing on corporate liability and service deficiency.</li>
+              <li>Observed the registry and procedural framework — complete lifecycle of complaints against corporations and service providers.</li>
+              <li>Assisted in drafting case summaries for matters involving unfair trade practices and consumer protection law.</li>
+            </ul>
+            <button class="vl" onclick="openM('NCDRC — Internship Certificate','certificates/ncdrc.jpg')">📎 View Certificate</button>
+          </div>
+
+          <div class="tl-item card spotlight-card searchable reveal" data-text="internship juhi arora associates december 2024 delhi high court criminal matrimonial drafting">
+            <div class="spotlight-border"></div>
+            <div class="tl-node"></div>
+            <div class="card-hd"><div class="card-org">Juhi Arora & Associates, New Delhi</div><div class="card-mt"><span class="badge">Litigation · Drafting</span><span class="dp">December 2024 · 4 weeks</span></div></div>
+            <ul class="pts">
+              <li>Drafted plaints, applications, and vakalatnamas for matters before Delhi District Courts and the High Court.</li>
+              <li>Conducted focused legal research on statutory provisions and precedents for case strategy development.</li>
+              <li>Assisted in preparation of written submissions and legal opinions for client advisory purposes.</li>
+            </ul>
+            <button class="vl" onclick="openM('Juhi Arora & Associates — Internship Certificate','certificates/juhi.jpg')">📎 View Certificate</button>
+          </div>
+
+          <div class="tl-item card spotlight-card searchable reveal" data-text="internship rajasthan state legal services authority june 2024 legal aid women marginalized">
+            <div class="spotlight-border"></div>
+            <div class="tl-node"></div>
+            <div class="card-hd"><div class="card-org">Rajasthan State Legal Services Authority</div><div class="card-mt"><span class="badge">Legal Aid · Public Law</span><span class="dp">June 2024 · 4 weeks</span></div></div>
+            <ul class="pts">
+              <li>Assisted the Hon'ble Judge in court proceedings and prepared legal documents under the Legal Services Authorities Act.</li>
+              <li>Provided legal aid to women and marginalised communities through research and opinion drafting.</li>
+              <li>Drafted legal awareness materials on statutory rights for underserved communities.</li>
+            </ul>
+            <button class="vl" onclick="openM('Rajasthan SLSA — Internship Certificate','certificates/rajasthan.jpg')">📎 View Certificate</button>
+          </div>
+
+          <div class="tl-item card spotlight-card searchable reveal" data-text="internship pradeep rai supreme court november 2023 constitutional civil case law">
+            <div class="spotlight-border"></div>
+            <div class="tl-node"></div>
+            <div class="card-hd"><div class="card-org">Law Office of Sr. Advocate Pradeep Rai, Supreme Court of India</div><div class="card-mt"><span class="badge">Supreme Court · Research</span><span class="dp">November 2023 · 4 weeks</span></div></div>
+            <ul class="pts">
+              <li>Researched case laws and analysed statutory provisions for matters pending before the Supreme Court.</li>
+              <li>Assisted in drafting written submissions and identifying relevant precedents across constitutional and civil law matters.</li>
+            </ul>
+            <button class="vl" onclick="openM('Sr. Advocate Pradeep Rai — Internship Certificate','certificates/pradeep.jpg')">📎 View Certificate</button>
+          </div>
+
+          <div class="tl-item card spotlight-card searchable reveal" data-text="internship hamari pahchan ngo april 2023 community legal aid drafting underprivileged">
+            <div class="spotlight-border"></div>
+            <div class="tl-node"></div>
+            <div class="card-hd"><div class="card-org">Hamari Pahchan NGO</div><div class="card-mt"><span class="badge">NGO · Legal Aid</span><span class="dp">April 2023 · 4 weeks</span></div></div>
+            <ul class="pts">
+              <li>Drafted and filed legal documents for community legal support for underprivileged individuals.</li>
+              <li>Led a social-legal awareness project, preparing informational materials on applicable laws for marginalised communities.</li>
+            </ul>
+            <button class="vl" onclick="openM('Hamari Pahchan NGO — Internship Certificate','certificates/hamari.jpg')">📎 View Certificate</button>
+          </div>
+
+          <div class="tl-item card spotlight-card searchable reveal" data-text="internship amikus qriae november 2022 mock judgments legal research practical">
+            <div class="spotlight-border"></div>
+            <div class="tl-node"></div>
+            <div class="card-hd"><div class="card-org">The Amikus Qriae</div><div class="card-mt"><span class="badge">Research · Drafting</span><span class="dp">November 2022 · 4 weeks</span></div></div>
+            <ul class="pts">
+              <li>Drafted mock judgments under expert guidance, developing skills in judicial reasoning and legal writing.</li>
+              <li>Conducted legal research and resolved practical legal queries involving real-world applications of substantive law.</li>
+            </ul>
+            <button class="vl" onclick="openM('The Amikus Qriae — Internship Certificate','certificates/amikus.jpg')">📎 View Certificate</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="pub" class="sec reveal">
+        <div class="sec-hd">
+          <svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <h2>Publications</h2><div class="sec-hd-ln"></div>
+        </div>
+
+        <div class="card spotlight-card searchable reveal" data-text="publication article blockchain traceability geographical indications GI governance india GD Goenka university conference paper technology law">
+          <div class="spotlight-border"></div>
+          <div class="card-hd"><div class="card-org">"<span class="glitch-text" data-text="Blockchain">Blockchain</span> Traceability in Geographical Indications: A Three-Layer Disconnect in Indian GI Governance"</div><div class="card-mt"><span class="badge">Conference Paper · GD Goenka University</span></div></div>
+          <ul class="pts">
+            <li>Presented at the International Conference on Geographical Indications: Institutions, Technology, Entrepreneurship and Social Impact (April 2026).</li>
+            <li>Examined the governance gaps in India's GI framework through the lens of blockchain traceability and technology-law interaction.</li>
+          </ul>
+        </div>
+
+        <div class="card spotlight-card searchable reveal" data-text="publication article privacy workplace comparative analysis IJRMLH data corporate governance">
+          <div class="spotlight-border"></div>
+          <div class="card-hd"><div class="card-org">"Privacy in the Workplace: A Comparative Analysis"</div><div class="card-mt"><span class="badge">IJRMLH · Peer Reviewed</span></div></div>
+          <ul class="pts"><li>Examines employee privacy rights across jurisdictions with implications for corporate data governance and HR compliance frameworks.</li></ul>
+          <a class="vl ext" href="https://doij.org/10.10000/IJLMH.117341" target="_blank">🔗 Read Paper →</a>
+          <button class="vl" onclick="openM('IJRMLH — Research Publication Certificate','certificates/research_cert.jpg')">📎 View Certificate</button>
+        </div>
+
+        <div class="card spotlight-card searchable reveal" data-text="publication article gig workers strike labour law india fintech platform economy new year protests">
+          <div class="spotlight-border"></div>
+          <div class="card-hd"><div class="card-org">"New Year, New Protests: Can Gig Workers Legally Go on Strike in India?"</div><div class="card-mt"><span class="badge">Legal Service India</span></div></div>
+          <ul class="pts"><li>Analyses the legal framework governing gig and platform workers — a critical issue at the intersection of FinTech, labour law, and platform economy regulation.</li></ul>
+          <a class="vl ext" href="https://www.legalserviceindia.com/Legal-Articles/new-year-new-protests-can-gig-workers-legally-go-on-strike-in-india/" target="_blank">🔗 Read Article →</a>
+        </div>
+
+        <div class="card spotlight-card searchable reveal" data-text="publication article deepfake photo harassment cyber law IT act IPR digital rights TMT">
+          <div class="spotlight-border"></div>
+          <div class="card-hd"><div class="card-org">"Your Face, Their Crime: A Legal Shield Against Deepfake and Photo Harassment"</div><div class="card-mt"><span class="badge">Legal Service India</span></div></div>
+          <ul class="pts"><li>Analyses legal remedies available under the IT Act and emerging data protection frameworks for victims of digital image abuse and AI-generated deepfakes.</li></ul>
+          <a class="vl ext" href="https://www.legalserviceindia.com/Legal-Articles/your-face-their-crime-a-legal-shield-against-deepfake-and-photo-harassment/" target="_blank">🔗 Read Article →</a>
+        </div>
+
+        <div class="card spotlight-card searchable reveal" data-text="publication article DPDPA digital personal data protection act 2023 privacy business corporate compliance fintech">
+          <div class="spotlight-border"></div>
+          <div class="card-hd"><div class="card-org">"The Digital Personal Data Protection Act, 2023 (<span class="glitch-text" data-text="DPDPA">DPDPA</span>)"</div><div class="card-mt"><span class="badge">Legal Service India</span></div></div>
+          <ul class="pts"><li>Examines key provisions, obligations, and compliance requirements under the DPDPA, with analysis of implications for corporate entities and FinTech businesses processing personal data.</li></ul>
+          <a class="vl ext" href="https://www.legalserviceindia.com/Legal-Articles/the-digital-personal-data-protection-act-2023-dpdpa-navigating-indias-new-data-privacy-landscape-for-businesses/" target="_blank">🔗 Read Article →</a>
+        </div>
+      </section>
+
+      <section id="cert" class="sec reveal">
+        <div class="sec-hd">
+          <svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+          <h2>Workshops & Certifications</h2><div class="sec-hd-ln"></div>
+        </div>
+        <div class="crt-grid">
+          <div class="crt-card spotlight-card searchable reveal" data-text="certification securities investment law lloyd law college certification">
+            <div class="spotlight-border"></div>
+            <div class="crt-nm">Securities & Investment Law</div><div class="crt-is">Lloyd Law College</div>
+            <button class="vl" onclick="openM('Securities & Investment Law — Certificate','certificates/securities.jpg')">📎 View Certificate</button>
+          </div>
+          <div class="crt-card spotlight-card searchable reveal" data-text="certification mergers acquisitions M&A contracts masterclass legal practice workshop">
+            <div class="spotlight-border"></div>
+            <div class="crt-nm">Masterclass on M&A Contracts</div><div class="crt-is">Legal Practice Workshop</div>
+            <button class="vl" onclick="openM('M&A Contracts Masterclass — Certificate','certificates/ma.jpg')">📎 View Certificate</button>
+          </div>
+          <div class="crt-card spotlight-card searchable reveal" data-text="certification contract drafting negotiation workshop legal practice">
+            <div class="spotlight-border"></div>
+            <div class="crt-nm">Contract Drafting & Negotiation</div><div class="crt-is">Legal Practice Workshop</div>
+            <button class="vl" onclick="openM('Contract Drafting & Negotiation — Certificate','certificates/contract.jpg')">📎 View Certificate</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="cocur" class="sec reveal">
+        <div class="sec-hd">
+          <svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+          <h2>Co-Curricular Activities</h2><div class="sec-hd-ln"></div>
+        </div>
+        <div class="card spotlight-card searchable reveal" data-text="co-curricular LIMA peer camp mediation arbitration ADR SK mishra court master">
+          <div class="spotlight-border"></div>
+          <ul class="pts">
+            <li>Participated in the <strong>LIMA Peer Camp</strong> — Mediation & Arbitration, gaining practical exposure to alternative dispute resolution mechanisms.</li>
+            <li>Served as <strong>Court Master</strong> during the S.K. Mishra Mediation Competition, managing procedural aspects of the moot mediation proceedings.</li>
+          </ul>
+          <button class="vl" onclick="openM('LIMA Peer Camp — Certificate','certificates/lima.jpg')">📎 View Certificate</button>
+        </div>
+      </section>
+
+      <section id="int" class="sec reveal">
+        <div class="sec-hd">
+          <svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>
+          <h2>Areas of Interest</h2><div class="sec-hd-ln"></div>
+        </div>
+        <div class="int-grid">
+          <div class="int-card spotlight-card searchable reveal" data-text="interest fintech financial technology regulation payments digital banking">
+            <div class="spotlight-border"></div>
+            <div class="int-ic"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+            <div class="int-nm">FinTech Law</div>
+            <div class="int-de">Digital payments, crypto regulation, financial data compliance, and fintech licensing frameworks.</div>
+          </div>
+          <div class="int-card spotlight-card searchable reveal" data-text="interest TMT technology media telecommunications digital law content platform">
+            <div class="spotlight-border"></div>
+            <div class="int-ic"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div>
+            <div class="int-nm">TMT Law</div>
+            <div class="int-de">Platform liability, digital content regulation, telecom law, and media & entertainment contracts.</div>
+          </div>
+          <div class="int-card spotlight-card searchable reveal" data-text="interest corporate law governance mergers acquisitions compliance contracts">
+            <div class="spotlight-border"></div>
+            <div class="int-ic"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg></div>
+            <div class="int-nm">Corporate Law</div>
+            <div class="int-de">Corporate governance, M&A transactions, regulatory compliance, and commercial contracts.</div>
+          </div>
+          
+          <div class="int-card spotlight-card searchable ipr-card reveal" data-text="interest IPR intellectual property rights trademark copyright data protection enforcement">
+            <div class="spotlight-border"></div>
+            <div class="bio-mark"></div>
+            <div class="int-ic"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg></div>
+            <div class="int-nm">Intellectual Property</div>
+            <div class="int-de">Trademark, copyright, data protection, and IP enforcement in the digital economy.</div>
+            <div class="ipr-stamp">® VERIFIED</div>
+          </div>
+          
+          <div class="int-card spotlight-card searchable reveal" data-text="interest cyber law digital data protection technology online dispute DPDPA">
+            <div class="spotlight-border"></div>
+            <div class="int-ic"><svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></div>
+            <div class="int-nm"><span class="glitch-text" data-text="Cyber Law">Cyber Law</span></div>
+            <div class="int-de">Digital personal data protection, technology law, and online dispute resolution.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="sec reveal">
+        <div class="sec-hd">
+          <svg class="svg-ic" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <h2>Let's Connect</h2><div class="sec-hd-ln"></div>
+        </div>
+        <div class="ct-wrap">
+          <div class="ct-grid">
+            <div class="ct-l">
+              <h3>Open to Assessment Internships & Entry-Level Roles</h3>
+              <p>As a graduating 5th-year law student, I am ready to transition from academic learning to practical corporate contribution. I am actively seeking <strong>assessment internships, long-term engagements, and entry-level corporate roles</strong> in Corporate Law, FinTech, and TMT. If your team is looking for a dedicated, research-driven professional with practical experience, let's talk.</p>
+              <div class="ct-info">
+                <div class="ci">✉️ <a href="mailto:tanupathak365@gmail.com">tanupathak365@gmail.com</a></div>
+                <div class="ci">📞 <a href="tel:+919548656819">+91 9548656819</a></div>
+                <div class="ci">🔗 <a href="https://www.linkedin.com/in/tanu-pathak-a18434251/" target="_blank">linkedin.com/in/tanu-pathak-a18434251</a></div>
+                <div class="ci">📍 Lloyd Law College, Greater Noida</div>
+              </div>
+            </div>
+            <div>
+              <form class="cform" id="cForm" action="https://formspree.io/f/xbdqqgvv" method="POST">
+                <input type="hidden" name="_subject" value="💼 Recruiter Message — Tanuhari Pathak Portfolio"/>
+                <input type="text" name="name" placeholder="Your Name" required />
+                <input type="email" name="email" placeholder="Your Email" required />
+                <input type="text" name="organization" placeholder="Organization / Firm" />
+                <textarea name="message" placeholder="Your message…" required></textarea>
+                <button type="submit" class="cform-btn magnetic-btn shimmer-btn">Send Message →</button>
+              </form>
+              <div class="cf-ok" id="cfOk">✓ Message sent! Tanuhari will get back to you shortly.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="no-res" id="noRes">No results found. Try a different keyword.</div>
+    </main>
+  </div>
+</div>
+
+<script>
+// --- THEMATIC NODE NETWORK BACKGROUND ---
+const canvas = document.getElementById('nodeCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+function initNodes() {
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight; particles = [];
+  const numParticles = window.innerWidth < 768 ? 30 : 60; 
+  for(let i = 0; i < numParticles; i++) {
+    particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4 });
+  }
+}
+window.addEventListener('resize', initNodes);
+initNodes();
+function animateNodes() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for(let i = 0; i < particles.length; i++) {
+    let p = particles[i]; p.x += p.vx; p.y += p.vy;
+    if(p.x < 0 || p.x > canvas.width) p.vx *= -1; if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+    ctx.beginPath(); ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2); ctx.fillStyle = 'rgba(200, 164, 90, 0.4)'; ctx.fill();
+    for(let j = i + 1; j < particles.length; j++) {
+      let p2 = particles[j]; let dx = p.x - p2.x; let dy = p.y - p2.y; let dist = Math.sqrt(dx*dx + dy*dy);
+      if(dist < 120) { ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.strokeStyle = `rgba(94, 207, 184, ${0.15 * (1 - dist/120)})`; ctx.lineWidth = 1; ctx.stroke(); }
+    }
+  }
+  requestAnimationFrame(animateNodes);
+}
+animateNodes();
+
+// --- CYBER-GLITCH EFFECT ---
+const glitchChars = '!<>-_\\\\/[]{}—=+*^?#_';
+document.querySelectorAll('.glitch-text').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    let iterations = 0;
+    const originalText = el.getAttribute('data-text') || el.innerText;
+    if(!el.getAttribute('data-text')) el.setAttribute('data-text', originalText);
+    const interval = setInterval(() => {
+      el.innerText = originalText.split('').map((char, index) => {
+        if(index < iterations) return originalText[index];
+        return glitchChars[Math.floor(Math.random() * glitchChars.length)];
+      }).join('');
+      if(iterations >= originalText.length) clearInterval(interval);
+      iterations += 1/3;
+    }, 30);
+  });
+});
+
+// --- IPR BIOMETRIC TRACKING ---
+document.querySelectorAll('.ipr-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--bioX', `${e.clientX - rect.left}px`);
+    card.style.setProperty('--bioY', `${e.clientY - rect.top}px`);
+  });
+});
+
+// --- HOLOGRAPHIC FOIL TRACKER ---
+document.getElementById('holoWrap').addEventListener('mousemove', e => {
+  const rect = e.target.getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width * 100;
+  const y = (e.clientY - rect.top) / rect.height * 100;
+  document.getElementById('holoFoil').style.backgroundPosition = `${x}% ${y}%`;
+});
+
+// --- MAGNETIC BUTTONS ---
+document.querySelectorAll('.magnetic-btn').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px) scale(1.05)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = `translate(0px, 0px) scale(1)`;
+  });
+});
+
+// --- SPOTLIGHT CARD BORDERS ---
+document.querySelectorAll('.spotlight-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mouseX', `${e.clientX - rect.left}px`);
+    card.style.setProperty('--mouseY', `${e.clientY - rect.top}px`);
+  });
+});
+
+// --- ODOMETER COUNT-UP (Rewritten & Smoothed) ---
+const counters = document.querySelectorAll('.count-up');
+let hasCounted = false;
+const countObs = new IntersectionObserver(entries => {
+  if(entries[0].isIntersecting && !hasCounted) {
+    hasCounted = true;
+    counters.forEach(c => {
+      const target = +c.getAttribute('data-target');
+      const duration = 2500; // 2.5 seconds for a smooth count
+      const startTime = performance.now();
+      const updateCount = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // easeOutQuart formula for elegant deceleration
+        const easeOut = 1 - Math.pow(1 - progress, 4);
+        c.innerText = Math.floor(easeOut * target);
+        if(progress < 1) requestAnimationFrame(updateCount);
+        else {
+          c.innerText = target;
+          if (c.hasAttribute('data-suffix')) c.innerText += c.getAttribute('data-suffix');
+        }
+      };
+      requestAnimationFrame(updateCount);
+    });
+  }
+}, { threshold: 0.6 }); // Triggers when the stats bar is 60% visible on screen
+const statsSec = document.getElementById('statsBar');
+if(statsSec) countObs.observe(statsSec);
+
+// --- ROTATING STATS ---
+const rotData = [
+  { main: "SC", sub: "Supreme Court Exp." },
+  { main: "Rsch", sub: "Legal Research" },
+  { main: "Draft", sub: "Contract Drafting" },
+  { main: "Adv", sub: "Corporate Advisory" }
+];
+let rotIdx = 0;
+const rotMain = document.getElementById('rotMain');
+const rotSub = document.getElementById('rotSub');
+setInterval(() => {
+  if(!rotMain || !rotSub) return;
+  rotMain.style.opacity = 0; rotSub.style.opacity = 0;
+  setTimeout(() => {
+    rotIdx = (rotIdx + 1) % rotData.length;
+    rotMain.innerText = rotData[rotIdx].main;
+    rotSub.innerText = rotData[rotIdx].sub;
+    rotMain.style.opacity = 1; rotSub.style.opacity = 1;
+  }, 300);
+}, 3000);
+
+// --- SKILL RADAR CHART ---
+function drawRadar() {
+  const canvas = document.getElementById('radarCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+  const maxRadius = 80;
+  const categories = ['Corporate Law', 'FinTech', 'Cyber Law', 'IPR', 'Drafting'];
+  const values = [0.9, 0.85, 0.85, 0.95, 0.8]; // Skill levels
+  const angleStep = (Math.PI * 2) / categories.length;
+
+  // Draw background web
+  ctx.strokeStyle = 'rgba(180, 148, 82, 0.15)';
+  ctx.lineWidth = 1;
+  for(let level = 1; level <= 4; level++) {
+    const r = (maxRadius / 4) * level;
+    ctx.beginPath();
+    for(let i = 0; i < categories.length; i++) {
+      const a = i * angleStep - Math.PI / 2;
+      ctx.lineTo(centerX + Math.cos(a) * r, centerY + Math.sin(a) * r);
+    }
+    ctx.closePath();
+    ctx.stroke();
+  }
+
+  // Draw axes & labels
+  ctx.font = '10px "DM Mono"';
+  ctx.fillStyle = '#968e7e';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for(let i = 0; i < categories.length; i++) {
+    const a = i * angleStep - Math.PI / 2;
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.lineTo(centerX + Math.cos(a) * maxRadius, centerY + Math.sin(a) * maxRadius);
+    ctx.stroke();
+    const labelR = maxRadius + 20;
+    ctx.fillText(categories[i].toUpperCase(), centerX + Math.cos(a) * labelR, centerY + Math.sin(a) * labelR);
+  }
+
+  // Animate skill polygon
+  let progress = 0;
+  function animatePoly() {
+    progress += 0.03;
+    if(progress > 1) progress = 1;
+    
+    ctx.clearRect(0,0, canvas.width, canvas.height);
+    ctx.strokeStyle = 'rgba(180, 148, 82, 0.15)';
+    for(let level = 1; level <= 4; level++) {
+      const r = (maxRadius / 4) * level;
+      ctx.beginPath();
+      for(let i = 0; i < categories.length; i++) {
+        const a = i * angleStep - Math.PI / 2;
+        ctx.lineTo(centerX + Math.cos(a) * r, centerY + Math.sin(a) * r);
+      }
+      ctx.closePath(); ctx.stroke();
+    }
+    for(let i = 0; i < categories.length; i++) {
+      const a = i * angleStep - Math.PI / 2;
+      ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.lineTo(centerX + Math.cos(a) * maxRadius, centerY + Math.sin(a) * maxRadius); ctx.stroke();
+      const labelR = maxRadius + 20; ctx.fillStyle = '#968e7e'; ctx.fillText(categories[i].toUpperCase(), centerX + Math.cos(a) * labelR, centerY + Math.sin(a) * labelR);
+    }
+
+    ctx.beginPath();
+    for(let i = 0; i < categories.length; i++) {
+      const a = i * angleStep - Math.PI / 2;
+      const val = values[i] * maxRadius * progress;
+      ctx.lineTo(centerX + Math.cos(a) * val, centerY + Math.sin(a) * val);
+    }
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(94, 207, 184, 0.2)';
+    ctx.fill();
+    ctx.strokeStyle = '#5ecfb8';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    for(let i = 0; i < categories.length; i++) {
+      const a = i * angleStep - Math.PI / 2;
+      const val = values[i] * maxRadius * progress;
+      ctx.beginPath();
+      ctx.arc(centerX + Math.cos(a) * val, centerY + Math.sin(a) * val, 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#c8a45a';
+      ctx.fill();
+    }
+
+    if(progress < 1) requestAnimationFrame(animatePoly);
+  }
+  
+  const radarObs = new IntersectionObserver(entries => {
+    if(entries[0].isIntersecting) { animatePoly(); radarObs.disconnect(); }
+  });
+  radarObs.observe(canvas);
+}
+document.addEventListener('DOMContentLoaded', drawRadar);
+
+// --- DYNAMIC SEARCH PLACEHOLDER ---
+const searchBar = document.getElementById('srch');
+const searchExamples = ["'internships'", "'publications'", "'fintech'", "'Delhi High Court'", "'corporate law'"];
+let searchExIdx = 0;
+setInterval(() => {
+  if (document.activeElement !== searchBar && searchBar.value === '') {
+    searchBar.style.opacity = 0;
+    setTimeout(() => {
+      searchExIdx = (searchExIdx + 1) % searchExamples.length;
+      searchBar.placeholder = "Search " + searchExamples[searchExIdx] + "…";
+      searchBar.style.opacity = 1;
+    }, 300);
+  }
+}, 3000);
+
+// --- DYNAMIC TYPING EFFECT ---
+const typeWords = ["Corporate Law.", "FinTech Regulation.", "TMT Law.", "Commercial Drafting."];
+let twIndex = 0, charIndex = 0, isDeleting = false;
+function typeEffect() {
+  const target = document.getElementById('type-text');
+  if(!target) return;
+  const currentWord = typeWords[twIndex];
+  if (isDeleting) { target.textContent = currentWord.substring(0, charIndex - 1); charIndex--; } 
+  else { target.textContent = currentWord.substring(0, charIndex + 1); charIndex++; }
+  let typingSpeed = isDeleting ? 40 : 80;
+  if (!isDeleting && charIndex === currentWord.length) { typingSpeed = 2000; isDeleting = true; } 
+  else if (isDeleting && charIndex === 0) { isDeleting = false; twIndex = (twIndex + 1) % typeWords.length; typingSpeed = 400; }
+  setTimeout(typeEffect, typingSpeed);
+}
+setTimeout(typeEffect, 1200);
+
+// --- SCROLL REVEAL & SVG ANIMATION OBSERVER ---
+document.addEventListener("DOMContentLoaded", function() {
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('active'); } });
+  }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+});
+
+// --- INTERACTIVE TIMELINE SCROLL LOGIC ---
+window.addEventListener('scroll', () => {
+  const tlWrap = document.getElementById('tlWrap');
+  if(!tlWrap) return;
+  const rect = tlWrap.getBoundingClientRect(); const winH = window.innerHeight;
+  const scrollPx = (winH / 2) - rect.top; let prog = (scrollPx / rect.height) * 100; prog = Math.max(0, Math.min(100, prog));
+  document.getElementById('tlProg').style.height = prog + '%';
+  document.querySelectorAll('.tl-item').forEach(item => {
+    if(item.getBoundingClientRect().top < winH / 2 + 60) item.classList.add('lit');
+    else item.classList.remove('lit');
+  });
+});
+
+// --- GATE BOOT SEQUENCE ---
+document.getElementById('vTime').value = new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
+document.getElementById('gForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = document.getElementById('gEmail').value.trim();
+  if(!email||!email.includes('@')){document.getElementById('gErr').style.display='block';return;}
+  document.getElementById('gErr').style.display='none';
+  
+  // Submit silently
+  try{fetch('https://formspree.io/f/xbdqqgvv',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email,_subject:'📂 New Portfolio Visit — Tanuhari Pathak',message:`Visitor: ${email} | Time: ${new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'})}`})});}catch(e){}
+  
+  // 1. Hide Gate
+  document.getElementById('gate').classList.add('out');
+  setTimeout(() => {
+    document.getElementById('gate').style.display = 'none';
+    // 2. Show Boot Sequence
+    const boot = document.getElementById('bootScreen');
+    const wrap = document.getElementById('bootTextWrap');
+    boot.style.display = 'flex';
+    
+    const lines = [
+      "> ESTABLISHING SECURE CONNECTION...",
+      "> VERIFYING CREDENTIALS [TANUHARI PATHAK]...",
+      "> DECRYPTING PORTFOLIO DATA...",
+      "> ACCESS GRANTED."
+    ];
+    
+    let delay = 0;
+    lines.forEach((line, idx) => {
+      setTimeout(() => {
+        const div = document.createElement('div');
+        div.className = 'boot-line';
+        div.innerText = line;
+        wrap.appendChild(div);
+        setTimeout(()=> div.style.opacity = 1, 50);
+      }, delay);
+      delay += 300;
+    });
+    
+    // 3. Hide Boot & Show App
+    setTimeout(() => {
+      boot.style.opacity = 0;
+      boot.style.transition = 'opacity 0.4s';
+      setTimeout(() => {
+        boot.style.display = 'none';
+        document.getElementById('app').classList.add('on');
+        setTimeout(() => { document.querySelectorAll('.reveal').forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight) { el.classList.add('active'); } }); }, 100);
+      }, 400);
+    }, delay + 400);
+
+  }, 500);
+});
+
+// --- SIDEBAR ---
+function toggleSB(){document.getElementById('sidebar').classList.toggle('open');}
+function closeSB(){if(window.innerWidth<=960)document.getElementById('sidebar').classList.remove('open');}
+
+// --- MODAL ---
+function openM(title, src){
+  document.getElementById('mTitle').textContent=title; document.getElementById('mImg').src=src;
+  const g=document.getElementById('wmGrid');g.innerHTML='';
+  const lines=['Tanuhari Pathak','tanupathak365@gmail.com','Verified Copy · Not for Redistribution'];
+  for(let r=0;r<8;r++){for(let c=0;c<4;c++){const s=document.createElement('span');s.className='wm-it';s.textContent=lines[r%lines.length];s.style.left=(c*28)+'%';s.style.top=(r*13)+'%';g.appendChild(s);}}
+  document.getElementById('modal').classList.add('show'); document.body.style.overflow='hidden';
+}
+function closeM(){document.getElementById('modal').classList.remove('show');document.body.style.overflow='';}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeM();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM();});
+document.getElementById('mImg').addEventListener('contextmenu',e=>e.preventDefault());
+
+// --- CONTACT FORM ---
+document.getElementById('cForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  try{const r=await fetch(e.target.action,{method:'POST',headers:{'Accept':'application/json'},body:new FormData(e.target)});if(r.ok){e.target.style.display='none';document.getElementById('cfOk').style.display='block';}}catch(err){}
+});
+
+// --- SEARCH FIX ---
+function doSearch(q){
+  q=q.toLowerCase().trim(); let found=0;
+  document.querySelectorAll('.searchable').forEach(el=>{
+    const txt=(el.dataset.text||'')+' '+el.textContent.toLowerCase();
+    if(!q||txt.includes(q)){ el.style.display=''; el.classList.add('active'); found++; }
+    else { el.style.display='none'; }
+  });
+  document.querySelectorAll('.sec').forEach(s=>{
+    if(s.id==='hero') return; 
+    const searchables = s.querySelectorAll('.searchable');
+    if(searchables.length > 0) {
+      const vis = [...searchables].filter(e=>e.style.display !== 'none').length;
+      s.style.display = (vis === 0 && q) ? 'none' : '';
+    }
+  });
+  document.getElementById('noRes').style.display=(found===0&&q)?'block':'none';
+}
+
+// --- ACTIVE NAV ---
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.sb-a').forEach(n=>n.classList.remove('act'));const a=document.querySelector(`.sb-a[href="#${e.target.id}"]`);if(a)a.classList.add('act');}});
+},{threshold:0.25});
+document.querySelectorAll('.sec').forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
